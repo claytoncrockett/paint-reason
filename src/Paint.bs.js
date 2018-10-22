@@ -5,10 +5,57 @@ var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var ReasonReact = require("reason-react/src/ReasonReact.js");
+var Js_primitive = require("bs-platform/lib/js/js_primitive.js");
+var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
+
+function setCanvasRef(theRef, param) {
+  param[/* state */1][/* myCanvasRef */4][0] = (theRef == null) ? undefined : Js_primitive.some(theRef);
+  return /* () */0;
+}
 
 var component = ReasonReact.reducerComponent("Paint");
 
-function make(greeting, _) {
+function onMouseMove(state) {
+  return /* Update */Block.__(0, [/* record */[
+              /* line */state[/* line */0],
+              /* isPainting */state[/* isPainting */1],
+              /* prevPos */state[/* prevPos */2],
+              /* count */state[/* count */3] + 1 | 0,
+              /* myCanvasRef */state[/* myCanvasRef */4]
+            ]]);
+}
+
+function onMouseDown(state) {
+  return /* Update */Block.__(0, [/* record */[
+              /* line */state[/* line */0],
+              /* isPainting */state[/* isPainting */1],
+              /* prevPos */state[/* prevPos */2],
+              /* count */state[/* count */3] - 100 | 0,
+              /* myCanvasRef */state[/* myCanvasRef */4]
+            ]]);
+}
+
+function onMouseUp(state) {
+  return /* Update */Block.__(0, [/* record */[
+              /* line */state[/* line */0],
+              /* isPainting */state[/* isPainting */1],
+              /* prevPos */state[/* prevPos */2],
+              /* count */state[/* count */3] + 1 | 0,
+              /* myCanvasRef */state[/* myCanvasRef */4]
+            ]]);
+}
+
+function onMouseLeave(state) {
+  return /* Update */Block.__(0, [/* record */[
+              /* line */state[/* line */0],
+              /* isPainting */state[/* isPainting */1],
+              /* prevPos */state[/* prevPos */2],
+              /* count */state[/* count */3] + 1 | 0,
+              /* myCanvasRef */state[/* myCanvasRef */4]
+            ]]);
+}
+
+function make() {
   return /* record */[
           /* debugName */component[/* debugName */0],
           /* reactClassInternal */component[/* reactClassInternal */1],
@@ -20,42 +67,75 @@ function make(greeting, _) {
           /* willUpdate */component[/* willUpdate */7],
           /* shouldUpdate */component[/* shouldUpdate */8],
           /* render */(function (self) {
-              var message = "You've clicked this " + (String(self[/* state */1][/* count */0]) + " times(s)");
-              var match = self[/* state */1][/* show */1];
+              var message = "You've clicked this " + (String(self[/* state */1][/* count */3]) + " times(s)");
               return React.createElement("div", undefined, React.createElement("button", {
-                              onClick: (function () {
-                                  return Curry._1(self[/* send */3], /* Click */0);
+                              onMouseMove: (function () {
+                                  return Curry._1(self[/* send */3], /* MouseMove */1);
                                 })
-                            }, message), React.createElement("button", {
-                              onClick: (function () {
-                                  return Curry._1(self[/* send */3], /* Toggle */1);
+                            }, message), React.createElement("canvas", {
+                              ref: Curry._1(self[/* handle */0], setCanvasRef),
+                              className: "mainCanvas",
+                              onMouseDown: (function () {
+                                  return Curry._1(self[/* send */3], /* MouseDown */0);
+                                }),
+                              onMouseLeave: (function () {
+                                  return Curry._1(self[/* send */3], /* MouseLeave */3);
+                                }),
+                              onMouseMove: (function () {
+                                  return Curry._1(self[/* send */3], /* MouseMove */1);
+                                }),
+                              onMouseUp: (function () {
+                                  return Curry._1(self[/* send */3], /* MouseUp */2);
                                 })
-                            }, "Toggle greeting"), match ? greeting : null);
+                            }));
             }),
           /* initialState */(function () {
               return /* record */[
+                      /* line : :: */[
+                        0.0,
+                        /* [] */0
+                      ],
+                      /* isPainting */false,
+                      /* prevPos : record */[
+                        /* offsetX */0.0,
+                        /* offsetY */0.0
+                      ],
                       /* count */0,
-                      /* show */true
+                      /* myCanvasRef : record */[/* contents */undefined]
                     ];
             }),
           /* retainedProps */component[/* retainedProps */11],
           /* reducer */(function (action, state) {
-              if (action) {
-                return /* Update */Block.__(0, [/* record */[
-                            /* count */state[/* count */0],
-                            /* show */!state[/* show */1]
-                          ]]);
-              } else {
-                return /* Update */Block.__(0, [/* record */[
-                            /* count */state[/* count */0] + 1 | 0,
-                            /* show */state[/* show */1]
-                          ]]);
+              switch (action) {
+                case 0 : 
+                    return onMouseDown(state);
+                case 1 : 
+                    return onMouseMove(state);
+                case 2 : 
+                    return onMouseUp(state);
+                case 3 : 
+                    return onMouseLeave(state);
+                case 4 : 
+                    throw [
+                          Caml_builtin_exceptions.match_failure,
+                          /* tuple */[
+                            "Paint.re",
+                            49,
+                            6
+                          ]
+                        ];
+                
               }
             }),
           /* jsElementWrapped */component[/* jsElementWrapped */13]
         ];
 }
 
+exports.setCanvasRef = setCanvasRef;
 exports.component = component;
+exports.onMouseMove = onMouseMove;
+exports.onMouseDown = onMouseDown;
+exports.onMouseUp = onMouseUp;
+exports.onMouseLeave = onMouseLeave;
 exports.make = make;
 /* component Not a pure module */
